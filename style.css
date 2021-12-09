@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+
+body {
+  /* background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%); */
+  background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+  user-select: none;
+}
+
+.wrapper {
+  text-align: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.toDo,
+.inProgress,
+.ready {
+  font-family: "Roboto", sans-serif;
+  box-sizing: border-box;
+  height: 350px;
+  width: 270px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: top;
+  margin: 10px;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 10px;
+}
+
+header {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  color: #600000;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  text-align: start;
+}
+
+.toDoList li {
+  height: 30px;
+  line-height: 30px;
+  color: #600000;
+  background: #fff;
+  margin: 10px 10px 0px 10px;
+  padding: 0 15px;
+  border-radius: 3px;
+  box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.toDoList li:hover span {
+    opacity: 100;
+}
+
+.toDoList li:hover {
+    box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.3);
+}
+
+.toDoList li span {
+  position: absolute;
+  right: 0px;
+  color: #e2d1c3;
+  margin-right: 5px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.toDoList li span i {
+  margin: 2px;
+}
+
+.inputField {
+  display: inline-block;
+  box-sizing: border-box;
+  text-align: start;
+  height: 30px;
+  width: 100%;
+  position: relative;
+}
+
+.inputField input {
+  height: 20px;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  padding-left: 10px;
+  font-family: "Roboto", sans-serif;
+  box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.2);
+  width: 70%;
+  margin: 0px 0px 0px 10px;
+  position: absolute;
+}
+
+.inputField button {
+  width: 30px;
+  height: 20px;
+  border: none;
+  box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.2);
+  outline: none;
+  background: #fff;
+  border-radius: 3px;
+  right: 10px;
+  position: absolute;
+}
+
+.inputField button i {
+  color: #e2d1c3;
+}
