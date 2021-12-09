@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task list</title>
     <link rel="stylesheet" href="style1.css" />
+    <link
+      rel="stylesheet"
+      href="./node_modules/@fortawesome/fontawesome-free/css/all.css"
+    />
 </head>
 <body>
     <header>
@@ -20,6 +24,10 @@
                     <div id="content">
                         <input type="text" class="text" value="First task" readonly>
                     </div>
+                    <div class="actions">
+                        <button class="edit"><i class="fas fa-pen"></i></button>
+                        <button class="delete"><i class="fas fa-trash"></i></button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -30,5 +38,6 @@
             <h2>Done</h2>
         </section>
     </main>
+    <script src="app1.js"></script>
 </body>
 </html>
