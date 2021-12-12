@@ -39,6 +39,20 @@ window.onload = () => {
         const delete_button_i = document.createElement('i');
         delete_classes_to_add.forEach((el) => {delete_button_i.classList.add(...delete_classes_to_add)});
         task_delete_button.appendChild(delete_button_i);
+
+        task_edit_button.addEventListener('click', () => {
+            task_input_el.removeAttribute('readonly');
+            task_input_el.focus();
+            task_input_el.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    task_input_el.setAttribute('readonly', 'readonly')
+                };
+            });
+        });
+
+        task_delete_button.addEventListener('click', () => {
+            list_el.removeChild(task_el);
+        })
     };
 
     new_task_button_to_do.addEventListener('click', newTask);
