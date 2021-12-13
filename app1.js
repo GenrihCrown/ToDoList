@@ -2,11 +2,13 @@ window.onload = () => {
     const new_task_button_to_do = document.querySelector('#new-task-button-to-do');
     const new_task_button_in_progress = document.querySelector('#new-task-button-in-progress');
     const new_task_button_done = document.querySelector('#new-task-button-done');
-    const list_el = document.querySelector('#tasks')
+    const to_do_list_el = document.querySelector('#to-do-tasks');
+    const in_progress_list_el = document.querySelector('#in-progress-tasks');
+    const done_list_el = document.querySelector('#done-tasks');
 
-    function newTask (e) {
+    function newTask (e, list_el) {
         e.preventDefault();
-
+        
         const task_el = document.createElement('div');
         task_el.classList.add('task');
         list_el.appendChild(task_el);
@@ -55,10 +57,10 @@ window.onload = () => {
         })
     };
 
-    new_task_button_to_do.addEventListener('click', newTask);
+    new_task_button_to_do.addEventListener('click', newTask(to_do_list_el));
 
-    new_task_button_in_progress.addEventListener('click', newTask);
+    new_task_button_in_progress.addEventListener('click', newTask(in_progress_list_el));
 
-    new_task_button_done.addEventListener('click', newTask);
+    new_task_button_done.addEventListener('click', newTask(done_list_el));
 }
 
