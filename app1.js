@@ -1,77 +1,89 @@
 window.onload = () => {
-  const new_task_button_to_do = document.querySelector(
-    '#new-task-button-to-do',
-  );
-  const new_task_button_in_progress = document.querySelector(
-    '#new-task-button-in-progress',
-  );
-  const new_task_button_done = document.querySelector('#new-task-button-done');
-  const to_do_list_el = document.querySelector('#to-do-tasks');
-  const in_progress_list_el = document.querySelector('#in-progress-tasks');
-  const done_list_el = document.querySelector('#done-tasks');
-
-  function newTask(e, list_el) {
+  // функция добавляения таски должна 1) создать таску и 2) добавить её в список
+  // она ничего не должна знать про внутренние операции по созданию таски
+  const addTask = (e) => {
     e.preventDefault();
+    // достаем нужный блок для списка тасок, ориентируясь в DOM по нажатой кнопке добавления
+    const _addButton = e.currentTarget;
+    const section = _addButton.parentNode;
+    const tasks = getTasksBySection(section);
 
-    const task_el = document.createElement('div');
-    task_el.classList.add('task');
-    list_el.appendChild(task_el);
+    // создаем новый инстанс одной таски (инпута с кнопками)
+    const taskElement = createTaskElement(tasks);
 
-    const task_content_el = document.createElement('div');
-    task_content_el.classList.add('content');
-    task_el.appendChild(task_content_el);
+    // добавляем в список сформированную потом и кровью таску =)
+    tasks.appendChild(taskElement);
+  };
 
-    const task_input_el = document.createElement('input');
-    task_input_el.classList.add('text');
-    task_input_el.value = 'New task';
-    task_input_el.setAttribute('readonly', 'readonly');
-    task_input_el.type = 'text';
-    task_content_el.appendChild(task_input_el);
+  // достаем кнопки, добавляющие таски, из всех трех колонок
+  const addButtons = document.getElementsByClassName('add');
+  // добавляем подписку на каждую из них
+  [...addButtons].forEach((addButton) =>
+    addButton.addEventListener('click', addTask),
+  );
+  // ПОЧЕМУ подаем newTask в addEventListener без вызова и передачи параметра??
+  // --- Дело в том, что листенер хочет, чтобы вторым аргументом мы передали просто какой-то callable (он может даже не принимать аргументов, но обычно мы хотим поработать с ивентом).
+  // --- В самом обычном случае - это коллбэк вида  (e) => {...}.
+  // --- То есть по сути мы можем его записать, как константу:
+  // --- --- const myCallback = (e) => {...}
+  // --- И тогда записи addEventListener('click', (e) => {...}) и addEventListener('click', myCallback) будут индентичны.
 
-    const task_edit_button = document.createElement('button');
-    task_edit_button.classList.add('edit');
-    task_content_el.appendChild(task_edit_button);
+  // описываем HTML-внутренности таски, чтобы не создавать его заново каждый раз
+  taskHTML = `
+  <input type="text" class="text" value="New task" readonly>
+  <button class="edit"><i class="fas fa-pen"></i></button>
+  <button class="delete"><i class="fas fa-trash"></i></button>
+  `;
 
-    const task_delete_button = document.createElement('button');
-    task_delete_button.classList.add('delete');
-    task_content_el.appendChild(task_delete_button);
+  // три вспомогательные функции
+  const getInputByTask = (currentTask) => currentTask.children[0];
+  const getTasksBySection = (section) => section.children['tasks'];
+  const getTasksByTask = (currentTask) => currentTask.parentNode;
 
-    const edit_classes_to_add = ['fas', 'fa-pen'];
-    const edit_button_i = document.createElement('i');
-    edit_classes_to_add.forEach(() => 
-      edit_button_i.classList.add(...edit_classes_to_add)
+  // фунцкия создания таски
+  const createTaskElement = () => {
+    // создаем оберточный блок div с классом 'task'
+    const taskElement = document.createElement('div');
+    taskElement.classList.add('task');
+    // впихиваем заранее подготовленную строку внутрь этого div'а
+    taskElement.innerHTML = taskHTML;
+    // распаковываем массив из 3-ёх дочерних элементов таски
+    // (инпут нам в этом скоупе не нужен, поэтому его не будем даже объявлять)
+    [, taskEditButton, taskDeleteButton] = taskElement.children;
+
+    // вешаем подписку на кнопку редактирования
+    taskEditButton.addEventListener(
+      'click',
+      ({ currentTarget: editButton }) => {
+        // достаем смежный с кнопкой редактирования инпут
+        const currentTask = editButton.parentNode;
+        const input = getInputByTask(currentTask);
+
+        input.removeAttribute('readonly');
+        input.focus();
+        input.addEventListener(
+          'keypress',
+          ({ key }) =>
+            // вариация тернарника, используя 'сайд-эффект' логической операции &&
+            key === 'Enter' && input.setAttribute('readonly', 'readonly'),
+        );
+      },
     );
-    task_edit_button.appendChild(edit_button_i);
 
-    const delete_classes_to_add = ['fas', 'fa-trash'];
-    const delete_button_i = document.createElement('i');
-    delete_classes_to_add.forEach(() =>
-      delete_button_i.classList.add(...delete_classes_to_add),
+    taskDeleteButton.addEventListener(
+      'click',
+      ({ currentTarget: deleteButton }) => {
+        // достаем и удаляем соответствующую кнопке таску
+        const currentTask = deleteButton.parentNode;
+        removeTaskElement(currentTask);
+      },
     );
-    task_delete_button.appendChild(delete_button_i);
+    return taskElement;
+  };
 
-    task_edit_button.addEventListener('click', () => {
-      task_input_el.removeAttribute('readonly');
-      task_input_el.focus();
-      task_input_el.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          task_input_el.setAttribute('readonly', 'readonly');
-        }
-      });
-    });
-
-    task_delete_button.addEventListener('click', ()=>list_el.removeChild(task_el));
-  }
-
-  new_task_button_to_do.addEventListener('click', (e) =>
-    newTask(e, to_do_list_el),
-  );
-
-  new_task_button_in_progress.addEventListener('click', (e) =>
-    newTask(e, in_progress_list_el),
-  );
-
-  new_task_button_done.addEventListener('click', (e) =>
-    newTask(e, done_list_el),
-  );
+  // фунцкия удаления таски
+  const removeTaskElement = (currentTask) => {
+    const tasks = getTasksByTask(currentTask);
+    tasks.removeChild(currentTask);
+  };
 };
