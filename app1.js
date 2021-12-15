@@ -9,7 +9,7 @@ window.onload = () => {
     const tasks = getTasksBySection(section);
 
     // создаем новый инстанс одной таски (инпута с кнопками)
-    const taskElement = createTaskElement(tasks);
+    const taskElement = createTaskElement();
 
     // добавляем в список сформированную потом и кровью таску =)
     tasks.appendChild(taskElement);
@@ -54,7 +54,7 @@ window.onload = () => {
     // вешаем подписку на кнопку редактирования
     taskEditButton.addEventListener(
       'click',
-      ({ currentTarget: editButton }) => {
+      ({currentTarget: editButton}) => {
         // достаем смежный с кнопкой редактирования инпут
         const currentTask = editButton.parentNode;
         const input = getInputByTask(currentTask);
@@ -67,6 +67,9 @@ window.onload = () => {
             // вариация тернарника, используя 'сайд-эффект' логической операции &&
             key === 'Enter' && input.setAttribute('readonly', 'readonly'),
         );
+
+        input.addEventListener(
+            'blur', (e) => input.setAttribute('readonly', 'readonly'),);
       },
     );
 
